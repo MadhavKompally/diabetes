@@ -43,7 +43,22 @@ def predict():
         return jsonify({'message':outcome})
     else:
         return render_template('predict.html')
-
+    
+@app.route("/show-patient",methods=['GET','POST'])
+def showpatinet():
+    conn = sqlite3.connect('patient.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM PATIENT_DETAILS")
+    data = []
+    for i in cur.fetchall():
+        patient={}
+        patient['patient_name'] = i[0]
+        patient['patient_age'] = i[1]
+        patient['gender'] = i[2]
+        patient['diabetic'] = i[3]
+        data.append(patient)
+    print(data)
+    return render_template('showpatient.html',data = data)
 
 if __name__=='__main__':
     app.run()
